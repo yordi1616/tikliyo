@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>የድምጽ ማጋሪያ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #1e40af;
+        }
+        .upload-section {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        .upload-form input[type="file"] {
+            border: 1px solid #ccc;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .upload-form button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .upload-form button:hover {
+            background-color: #2563eb;
+        }
+        .audio-list {
+            list-style: none;
+            padding: 0;
+        }
+        .audio-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #e9f0f9;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        .audio-item span {
+            font-weight: bold;
+            color: #1a202c;
+        }
+        .audio-controls a {
+            text-decoration: none;
+            background-color: #60a5fa;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        .audio-controls a:hover {
+            background-color: #3b82f6;
+        }
+        .stats {
+            margin-left: auto;
+            display: flex;
+            gap: 15px;
+            font-size: 0.9em;
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>የድምጽ ማጋሪያ</h1>
+        <div class="upload-section">
+            <h2>ድምጽ ስቀል</h2>
+            <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" class="upload-form">
+                <input type="file" name="audio" accept="audio/*" required>
+                <button type="submit">ስቀል</button>
+            </form>
+        </div>
+        
+        <h2>የተሰቀሉ ድምጾች</h2>
+        <ul class="audio-list">
+            {% for id, file in audio_files %}
+            <li class="audio-item">
+                <span>{{ file.filename }}</span>
+                <div class="stats">
+                    <span>👀 {{ file.views }}</span>
+                    <span>❤️ {{ file.likes }}</span>
+                </div>
+                <div class="audio-controls">
+                    <a href="{{ url_for('play_audio', file_id=id) }}">አጫውት</a>
+                    <a href="{{ url_for('like_audio', file_id=id) }}">Like</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
